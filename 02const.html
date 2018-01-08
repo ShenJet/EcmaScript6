@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>const</title>
+	</head>
+	<body>
+	</body>
+	<script>
+		
+		//const声明一个只读的常量。一旦声明，常量的值就不能改变。
+		const pi = 3.1415926 ;
+		const g = 9.8 ;
+		const e = 2.718 ;
+		//e = 3 ;//Uncaught TypeError: Assignment to constant variable.
+				 //常量的值就不能改变
+		
+		//const x ;//Uncaught SyntaxError: Missing initializer in const declaration
+				 //必须初始化值，不能留到以后赋值。
+			
+		//const的作用域与let命令相同：只在声明所在的块级作用域内有效。
+		//const命令声明的常量也是不提升，同样存在暂时性死区，只能在声明的位置后面使用。
+		{
+			const a = 11 ;
+			console.log(a)
+		}
+			//console.log(a)//a is not defined
+		
+		//const声明的常量，也与let一样不可重复声明。
+		var pi = 3 ;//Identifier 'pi' has already been declared
+		
+		
+		//**回顾
+		//ES6 声明变量的六种方法
+		//ES5 只有两种声明变量的方法：var命令和function命令。ES6 除了添加let和const命令，后面章节还会提到，另外两种声明变量的方法：import命令和class命令。所以，ES6 一共有 6 种声明变量的方法。
+		
+		
+		
+	</script>
+</html>
