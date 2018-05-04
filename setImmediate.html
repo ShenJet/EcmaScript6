@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script type="text/javascript">
+		setImmediate(function() {
+			setTimeout(function(){
+				console.log(1)
+			},0)
+			setImmediate(function() {
+				console.log(2)
+			})
+		})
+	</script>
+
+</html>

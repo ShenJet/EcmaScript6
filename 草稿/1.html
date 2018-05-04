@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    function max(/*...*/){
+        var max=Number.NEGATIVE_INFINITY;//遍历实参，查找并记住最大值
+        console.log(max);
+        for(var i=0; i<arguments.length; i++){
+            if(arguments[i]>max){
+                max=arguments[i];
+            }//返回最大值
+        }
+        return max;
+    }
+    var m = max(1,2,24,34,53,45,645,6,57,56)
+    console.log(m)
+</script>
+</html>

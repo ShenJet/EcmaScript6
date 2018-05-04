@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实例</title>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <circle cx="100" cy="50" r="40" stroke="black"
+            stroke-width="2" fill="red" />
+</svg>
+
+
+<P>
+    SVG 代码解析：<br>
+    
+    第一行包含了 XML 声明。请注意 standalone 属性！该属性规定此 SVG 文件是否是"独立的"，或含有对外部文件的引用。<br>
+    
+    standalone="no" 意味着 SVG 文档会引用一个外部文件 - 在这里，是 DTD 文件。<br>
+    
+    第二和第三行引用了这个外部的 SVG DTD。该 DTD 位于 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"。该 DTD 位于 W3C，含有所有允许的 SVG 元素。<br>
+    
+    SVG 代码以 <svg> 元素开始，包括开启标签 <svg> 和关闭标签 </svg> 。这是根元素。width 和 height 属性可设置此 SVG 文档的宽度和高度。version 属性可定义所使用的 SVG 版本，xmlns 属性可定义 SVG 命名空间。<br>
+    
+    SVG 的 <circle> 用来创建一个圆。cx 和 cy 属性定义圆中心的 x 和 y 坐标。如果忽略这两个属性，那么圆点会被设置为 (0, 0)。r 属性定义圆的半径。<br>
+        
+        stroke 和 stroke-width 属性控制如何显示形状的轮廓。我们把圆的轮廓设置为 2px 宽，黑边框。<br>
+        
+        fill 属性设置形状内的颜色。我们把填充颜色设置为红色。<br>
+        
+        关闭标签的作用是关闭 SVG 元素和文档本身。<br>
+        
+        注释：所有的开启标签必须有关闭标签！
+</P>
+
+<p>
+    svg标签可以直接写在html中，也可以嵌套于project、embed、iframe，<br>
+    也可以用a标签引入svg文件
+    <a href="./svg.svg">这是SVG</a>
+    <br>
+    也可以用img标签引入svg文件
+    <img src="svg.svg"  alt="">
+</p>
+
+
+</body>
+</html>

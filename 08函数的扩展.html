@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数的扩展</title>
+</head>
+<body>
+
+</body>
+<script>
+    //1.函数参数的默认值
+    //（1）基本用法
+    // ES6 之前，不能直接为函数的参数指定默认值，只能采用变通的方法。
+
+    function log(x, y) {
+        y = y || 'World';
+        console.log(x, y);
+    }
+    log('Hello') // Hello World
+    log('Hello', 'China') // Hello China
+    log('Hello', '') // Hello World
+
+    // ES6 允许为函数的参数设置默认值，即直接写在参数定义的后面。
+    function log(x, y = 'World') {
+        console.log(x, y);
+    }
+//    参数变量y默认是已声明了，不能用let或const再次声明，否则报错
+
+    //（2）与解构赋值默认值结合使用
+    // 参数默认值可以与解构赋值的默认值，结合起来使用。
+
+    // function foo({x, y = 5}) {
+    //     console.log(x, y);
+    // }
+    //
+    // foo({}) // undefined 5
+    // foo({x: 1}) // 1 5
+    // foo({x: 1, y: 2}) // 1 2
+    // foo() // TypeError: Cannot read property 'x' of undefined
+
+// （3）函数的 length 属性
+//  指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
+    (function (a) {}).length ; // 1
+    (function (a = 5) {}).length  ;// 0
+    (function (a, b, c = 5) {}).length ; // 2
+
+// （4）作用域
+//    1
+    let x = 2
+    function a(x,y=x) {
+        console.log(y)
+    }
+    a(3) //3
+    
+//    2
+    let xx = 2
+    function a(y = xx) {
+        console.log(y)
+    }
+    a() //2
+    
+//    3
+//     var x = 1
+//     function a(x = x) {
+//     //    ……
+//     }
+//     a()//x is not defined
+
+// 2.rest参数
+//    ES6 引入 rest 参数（形式为...变量名），用于获取函数的多余参数，
+// 这样就不需要使用arguments对象了。
+// rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+    function add(...values) {
+        let sum = 0;
+
+        for (var val of values) {
+            sum += val;
+        }
+
+        return sum;
+    }
+    add(2, 3, 5)    //10
+
+// 下面是一个 rest 参数代替arguments变量的例子：
+    // arguments变量的写法
+    // function sortNumbers() {
+    //     return Array.prototype.slice.call(arguments).sort();
+    // }
+
+    // rest参数的写法
+    const sortNumbers = (...numbers) => numbers.sort();
+//上面代码的两种写法，比较后可以发现，rest 参数的写法更自然也更简洁。
+// arguments对象不是数组，而是一个类似数组的对象。
+// 所以为了使用数组的方法，
+// 必须使用Array.prototype.slice.call先将其转为数组。
+// rest 参数就不存在这个问题，它就是一个真正的数组，
+// 数组特有的方法都可以使用。
+// 下面是一个利用 rest 参数改写数组push方法的例子。
+    function push1(arr, ...items) {
+        items.forEach(function (value) {
+            arr.push(item)
+        });
+        return arr
+    }
+//***注意，rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。
+
+    //3.严格模式 'use strict';
+    //从 ES5 开始，函数内部可以设定为严格模式。
+    function doSomething(a, b) {
+        'use strict';
+        // code
+    }
+    //ES2016 做了一点修改，
+    // 规定只要函数参数使用了默认值、解构赋值、或者扩展运算符，
+    // 那么函数内部就不能显式设定为严格模式，否则会报错。
+    //可以设定全局性的严格模式，来规避
+    
+//  4.name属性，返回该函数的函数名
+    function x1() {
+        console.log(123)
+    }
+    console.log(x1.name)
+    
+//  5.箭头函数
+//  ES6 允许使用“箭头”（=>）定义函数
+    var f = v => v;
+    console.log(f('xx'))//xx
+    //上面的箭头函数等同于：
+    var f = function(v) {
+        return v;
+    };
+//  如果箭头函数不需要参数或需要多个参数，就使用一个圆括号代表参数部分。
+    let fx = () => {
+        console.log(2 ** 4)
+    }
+    fx()
+//    箭头函数使得表达更加简洁。
+    const isEven = n => n % 2 == 0;
+    //箭头函数的一个用处是简化回调函数。
+
+    // 正常函数写法
+    [1,2,3].map(function (x) {
+        return x * x;
+    });
+    // 箭头函数写法
+    [1,2,3].map(x => x * x);
+//  另一个例子是
+    var values = [1,2,4,45,5,6,3,34]
+    // 正常函数写法
+    var res = values.sort(function (a, b) {
+        return a - b;
+    });
+    // 箭头函数写法
+    var res = values.sort((a, b) => a - b);
+    console.log(res)
+//  下面是 rest 参数与箭头函数结合的例子。
+    const numbers = (...nums) => nums;
+    numbers(1, 2, 3, 4, 5)
+    // [1,2,3,4,5]
+
+    const headAndTail = (head, ...tail) => [head, tail];
+    headAndTail(1, 2, 3, 4, 5)
+    //[1,[2, 3, 4, 5]]
+    
+//  **使用注意点
+// （1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+// （2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+// （3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
+// （4）不可以使用yield命令，因此箭头函数不能用作 Generator 函数。
+    
+    var obj = {
+        act: () => {console.log(this)} ,
+        act1: function () {
+            console.log(this)
+        }
+    }
+    obj.act();   // window
+    obj.act1();  // obj
+
+    // function foo() {
+    //     // setTimeout(() => {
+    //     //     console.log('id:', this.id);
+    //     // }, 100);
+    //     setTimeout(function(){
+    //         console.log('id:', this.id);
+    //     }, 100);
+    // }
+    // var id = 21;
+    // foo.call({ id: 42 });//42
+
+    function foo() {
+        setTimeout(function(){
+            console.log('id:', this.id);
+        }, 100);
+    }
+    var id = 21;
+    foo.call({ id: 42 });//21
+
+    function Timer() {
+        this.s1 = 0;
+        this.s2 = 0;
+        // 箭头函数
+        setInterval(() => {this.s1++;console.log(this.s1)}, 1000);
+        // 普通函数
+        setInterval(function () {
+            this.s2++;//this:window
+        }, 1000);
+    }
+    
+    // var timer = new Timer();//timer内2个定时器开始跑
+    // setTimeout(() => console.log('s1: ', timer.s1), 3100);
+    // setTimeout(() => console.log('s2: ', timer.s2), 3100);
+
+    // 箭头函数可以让this指向固定化，这种特性很有利于封装回调函数。
+    // 下面是一个例子，DOM 事件的回调函数封装在一个对象里面。
+    var handler = {
+        id: '123456',
+
+        init: function() {
+            document.addEventListener('click',
+                event => this.doSomething(event.type),//this==handler对象
+            false);
+        },
+
+        doSomething: function(type) {
+            console.log('Handling ' + type  + ' for ' + this.id);
+        }
+    };
+    handler.init();
+    // 长期以来，JavaScript 语言的this对象一直是一个令人头痛的问题，
+    // 在对象方法中使用this，必须非常小心。
+    // 箭头函数”绑定”this，很大程度上解决了这个困扰。
+
+//  **嵌套的箭头函数
+    //箭头函数内部，还可以再使用箭头函数。下面是一个 ES5 语法的多重嵌套函数。
+    // function insert(value) {
+    //     return {into: function (array) {
+    //             return {after: function (afterValue) {
+    //                     array.splice(array.indexOf(afterValue) + 1, 0, value);
+    //                     return array;
+    //                 }};
+    //         }};
+    // }
+    // insert(2).into([1, 3]).after(1); //[1, 2, 3]
+//  改写为ES6：
+    let insert = (value) => ({into:(array)=>({after:(afterValue) => {
+        array.splice(array.indexOf(afterValue) + 1, 0, value);
+        console.log(array);
+        return array ;
+    }})}) ;
+    insert(22).into([1,2,3]).after(1) ;
+
+    "use strict";
+
+    var pipeline = function pipeline(){
+        for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+            funcs[_key] = arguments[_key];
+        }
+
+        return function (val) {
+            return funcs.reduce(function (a, b) {
+                return b(a);
+            }, val);
+        };
+    };
+    pipeline(1,2,3,4,5)()
+    
+    
+//    6.双冒号运算符
+//     箭头函数可以绑定this对象，大大减少了显式绑定this对象的写法（call、apply、bind）。
+//     但是，箭头函数并不适用于所有场合，所以现在有一个提案，
+//     提出了“函数绑定”（function bind）运算符，
+//     用来取代call、apply、bind调用。
+//
+//     函数绑定运算符是并排的两个冒号（::），双冒号左边是一个对象，右边是一个函数。
+//     该运算符会自动将左边的对象，作为上下文环境（即this对象），绑定到右边的函数上面。
+
+    foo::bar;
+    // 等同于
+    bar.bind(foo);
+
+    foo::bar(...arguments);
+    // 等同于
+    bar.apply(foo, arguments);
+
+    const hasOwnProperty = Object.prototype.hasOwnProperty;
+    function hasOwn(obj, key) {
+        return obj::hasOwnProperty(key);
+    }
+    
+//    7.尾调用优化
+//     尾调用（Tail Call）是函数式编程的一个重要概念，
+//     本身非常简单，一句话就能说清楚，就是指某个函数的最后一步是调用另一个函数。
+    function f(x){
+        return g(x);
+    }
+    
+    //尾调用不一定出现在函数尾部，只要是最后一步操作即可。
+    function f(x) {
+        if (x > 0) {
+            return m(x)
+        }
+        return n(x);
+    }
+
+//    尾调用优化
+//    函数调用会在内存形成一个“调用记录”，又称“调用帧”（call frame），
+//    保存调用位置和内部变量等信息。
+//    斐波那契数列求和的一般写法：
+    const F1 = (n) => {
+        if(n<=1) return 1
+        return F1(n-1)+F1(n-2)
+    }
+    F1(10) // 89
+    //计算F1(1000)的时候浏览器基本已卡死
+//    复杂度O(n)，徐保留n次调用记录
+
+//    尾调用优化的写法：
+    const F2 = (n, a = 1, b = 1) => {
+        if(n<=1) return b
+        return F2(n-1, a+b, a)
+    }
+    F2(10)
+//    复杂度O(1)，徐保留1次调用记录
+
+//  还有一个例子是阶乘计算
+    const jc = (n) => {
+        if(n<=1) return 1
+        return n * jc(n-1)
+    }
+    jc(6) //720
+
+//  尾调用优化的写法：
+    const jc1 = (n, total = 1) => {
+        if(n<=1) return total
+        return jc1(n-1, n * total)
+    }
+    jc1(6) //720
+
+//    函数柯里化
+    function currying(fn, n) {
+        return function (m) {
+            return fn.call(this, m, n);
+        };
+    }
+    function tailFactorial(n, total) {
+        if (n === 1) return total;
+        return tailFactorial(n - 1, n * total);
+    }
+    const factorial = currying(tailFactorial, 1);
+
+    factorial(5) // 120
+//  上面代码通过柯里化，将尾递归函数tailFactorial变为只接受一个参数的factorial。
+
+//  第二种方法就简单多了，就是采用 ES6 的函数默认值。
+    function factorial(n, total = 1) {
+        if (n <= 1) return total;
+        return factorial(n - 1, n * total);
+    }
+    factorial(5) // 120
+    //上面代码中，参数total有默认值1，所以调用时不用提供这个值。
+
+//  一个正常的递归函数
+    function sum(x, y) {
+        if (y > 0) {
+            return sum(x + 1, y - 1);
+        } else {
+            return x;
+        }
+    }
+    sum(5, 1)//这个函数是从x开始逐渐加1 执行y次
+    sum(1, 100000) //这个递归次数比较大，会报错 too much recursion
+
+    //蹦床函数（trampoline）可以将递归执行转为循环执行。
+    function trampoline(f) {
+        while (f && f instanceof Function) {
+            f = f();
+        }
+        return f;
+    }
+// 上面就是蹦床函数的一个实现，它接受一个函数f作为参数。
+// 只要f执行后返回一个函数，就继续执行。
+// 注意，这里是返回一个函数，然后执行该函数，而不是函数里面调用函数，
+// 这样就避免了递归执行，从而就消除了调用栈过大的问题。
+
+//    8.函数参数的尾逗号
+//     ES2017 允许函数的最后一个参数有尾逗号（trailing comma）。
+//     这对于版本管理系统来说，就会显示添加逗号的那一行也发生了变动。
+//     这看上去有点冗余，因此新的语法允许定义和调用时，尾部直接有一个逗号。
+    function clownsEverywhere(
+        param1,
+        param2,
+    ) { /* ... */ }
+
+    clownsEverywhere(
+        'foo',
+        'bar',
+    );
+    
+    
+
+
+</script>
+</html>

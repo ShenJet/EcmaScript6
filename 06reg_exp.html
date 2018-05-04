@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>reg_exp</title>
+</head>
+<body>
+
+</body>
+<script type="application/javascript">
+    
+    //1.正则构造函数
+    //es5中：
+    var regex = new RegExp('xyz','i')
+    //或者：
+    var regex = new RegExp(/xyz/i)
+    //等价于：
+    var regex = /xyz/i ;
+    //注意不能写成 var regex = new RegExp(/xyz/,'i')
+    //不允许此时使用第二个参数添加修饰符
+    
+    //ES6中改变了：可以使用第二个参数指定修饰符，且会覆盖之前的所有修饰符
+    let f = new RegExp(/abc/ig, 'i').flags
+    console.log(f)
+    document.write(f)
+    
+    //2.字符串的正则方法
+    //match()、replace()、search()和split()
+    // ES6 将这 4 个方法，在语言内部全部调用RegExp的实例方法，从而做到所有与正则相关的方法，全都定义在RegExp对象上。
+    // String.prototype.match 调用 RegExp.prototype[Symbol.match]
+    // String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
+    // String.prototype.search 调用 RegExp.prototype[Symbol.search]
+    // String.prototype.split 调用 RegExp.prototype[Symbol.split]
+    
+    //3.u修饰符
+    //ES6添加了u修饰符
+    //正确处理大于\uFFFF的 Unicode 字符
+    //会正确处理四个字节的 UTF-16 编码。
+    let t1 = /^\uD83D/u.test('\uD83D\uDC2A') // false
+    let t2 = /^\uD83D/u.test('\uD83D1\uDC2A') // true
+    let t3 = /^\uD83D/.test('\uD83D\uDC2A') // true
+    console.log(t1, t2, t3)
+
+    //4.y修饰符  叫做“粘连”（sticky）修饰符
+    //y修饰符确保匹配必须从剩余的第一个位置开始，这也就是“粘连”的涵义
+    var s = 'aaa_aa_a';
+    var r1 = /a+/g;
+    var r2 = /a+/y;//把r2改成/a+_/y 再试试看
+    //exec：单次匹配
+    //1
+    console.log(r1.exec(s)) // ["aaa"]
+    console.log(r2.exec(s)) // ["aaa"]
+    //2-1
+    // console.log(r1.exec(s)) // ["aaa"]
+    // console.log(r2.exec(s)) // null
+    //2-2
+    console.log(r1.exec(s)) // ["aaa"]
+    console.log(r2.exec(s)) // null
+    
+    //5.sticky属性
+    //正则表达式.sticky  根据是否有y修饰符返回true/false,
+    
+//    6.flags属性  得到修饰符
+
+//    7.s修饰符，使得'.'可以匹配包括换行符在内的所有字符（dotAll模式）
+
+//    8.
+    
+    
+    
+</script>
+
+
+</html>
