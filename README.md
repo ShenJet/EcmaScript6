@@ -12,8 +12,18 @@ EcmaScript6新语法学习记录
 07.数值的扩展
 08.函数的扩展
 09.对象的扩展
-10.
-14.promise
+10.Symbol.html
+11.set和map数据结构.html
+12.proxy.html
+13.Reflect.html
+14.promise.html
+15.Iterator.html
+16.generator.html
+17.generator应用.html
+18.async.html
+19.Class.html
+20.Class的继承.html
+22.module语法.html
 ```
 
 
