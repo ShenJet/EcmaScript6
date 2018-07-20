@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // ES5 的对象属性名都是字符串，这容易造成属性名的冲突。
+    // 比如，你使用了一个他人提供的对象，但又想为这个对象添加新的方法（mixin 模式）
+    // 新方法的名字就有可能与现有方法产生冲突。
+    // ES6 引入Symbol,从根本上防止了属性名的冲突。
+
+    //Symbol是js的第七种数据类型
+    //undefined null str num bool obj
+
+//1.
+    // 创建一个symbol
+    let s = Symbol(1);
+    console.log(s, s==Symbol(1) , typeof s)// Symbol(1) false "symbol" 
+    console.log(Symbol()==Symbol()) //false
+
+    // *错误的声明：
+    // let s = new Symbol()
+    // 不可用new
+
+    // 便于区分不同的Symbol()  可以加入参数
+    // Symbol(1)  Symbol('ddd') ...
+    // 参数可以是对象
+    let obj1 = {name:"shenjie",age:18}
+    console.log(obj1.toString()) // [object Object]
+    let s1 = Symbol(obj1)
+    console.log(s1) // Symbol([object Object])
+
+    // 相同的参数 产生的Symbol不等
+    // 
+    let s2 = Symbol(obj1)
+    console.log(s1 == s2) //false
+
+    //Symbol 值不能与其他类型的值进行运算，会报错。
+    // let sym = Symbol('My symbol');
+    // console.log("your symbol is " + sym)
+    // TypeError: can't convert symbol to string
+    // console.log(`your symbol is ${sym}`)
+
+    // 但是， Symbol值可以转换为布尔值
+    console.log(Boolean(Symbol(11)))
+    
+//2.作为属性名
+    //  由于每一个 Symbol 值都是不相等的，这意味着 Symbol 值可以作为标识符，
+    //用于对象的属性名，就能保证不会出现同名的属性。
+    //这对于一个对象由多个模块构成的情况非常有用，
+    //能防止某一个键被不小心改写或覆盖。
+
+    let s3 = Symbol()
+    // 形式1
+    let obj2 = {}
+    obj2[s3] = "hello"
+    // 形式2
+    let obj3 = {
+        [s3]:"nihao!"
+    }
+    console.log(obj2, obj3, obj2[s3])
+    // 注意：symbol作为属性名不可用.运算符 只能 []
+    // 而且，在对象内部，也必须加[]   {[symbolx]:"hello js"}
+
+    // 如果对象属性是个函数，可以这么写：
+    let s4 = Symbol()
+    let obj4 = {
+        [s4](x){
+            return x+1
+        }
+    }
+
+    // Symbol 类型还可以用于定义一组常量，保证这组常量的值都是不相等的。
+
+    const log = {};
+    log.levels = {
+        DEBUG: Symbol('debug'),
+        INFO: Symbol('info'),
+        WARN: Symbol('warn')
+    };
+    console.log(log.levels.DEBUG, 'debug message');
+    console.log(log.levels.INFO, 'info message');
+
+
+//3.实例：消除魔术字符串
+    //魔术字符串指的是，在代码之中多次出现、与代码形成强耦合的某一个具体的字符串或者数值。
+    //风格良好的代码，应该尽量消除魔术字符串，改由含义清晰的变量代替。
+    // 在代码中多次出现某个字符串，而且这个字符串的具体内容比较随意
+    // 那么就完全可以定义一个变量赋值Symbol()，去代替他
+
+//4.属性名的遍历
+    // Symbol 作为属性名，该属性不会出现在for...in、for...of循环中，
+    //也不会被Object.keys()、Object.getOwnPropertyNames()、
+    //JSON.stringify()返回。
+    //但是，它也不是私有属性，有一个Object.getOwnPropertySymbols方法，
+    //可以获取指定对象的所有 Symbol 属性名。
+    //Object.getOwnPropertySymbols方法返回一个数组，
+    //成员是当前对象的所有用作属性名的 Symbol 值。
+
+//5.Symbol.for() Symbol.keyFor()
+    let ss1 = Symbol.for('foo');
+    let ss2 = Symbol.for('foo');
+    console.log(ss1 === ss2) // true
+
+    // Symbol.keyFor方法返回一个用Symbol.for方法登记过了的key
+    let s5 = Symbol.for("x")
+    let s6 = Symbol("x")
+
+    console.log(Symbol.keyFor(s5), Symbol.keyFor(s6))
+    // x   undefined
+
+    // *注意：Symbol.for()登记的是全局环境的！
+
+//6. 实例：模块的Singleton模式
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>

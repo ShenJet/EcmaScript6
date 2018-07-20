@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reflect</title>
+    <style>
+        .btn{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #fff;
+            font-size: 20px;
+            outline: none; 
+        }
+        .dis{
+            width: 100%;
+            height: 50px;
+            border: 2px solid #555;
+            text-align: right;
+            font-size: 30px;
+            line-height: 50px;
+            margin-bottom: 5px;
+        }
+        .main{
+            width: 220px;
+            text-align: center
+        }
+        .info{
+            display: block;
+            color: red;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="main">
+        <p class="dis">0</p>
+        <span class="info">等待操作…</span>
+        <button class="btn tag tag1">+</button>
+        <button class="btn tag tag2">-</button>
+        <button class="btn tag tag3">*</button>
+        <button class="btn tag tag4">÷</button>
+        
+        <button class="btn1 num btn">1</button>
+        <button class="btn2 num btn">2</button>
+        <button class="btn3 num btn">3</button>
+        <button class="btn4 num btn">4</button>
+        <button class="btn5 num btn">5</button>
+        <button class="btn6 num btn">6</button>
+        <button class="btn7 num btn">7</button>
+        <button class="btn8 num btn">8</button>
+        <button class="btn9 num btn">9</button>
+        <button class="btn10 num btn">0</button>
+        
+        <button class="btn equal">=</button>
+        <button class="btn clear">C</button>
+    </div>
+    
+</body>
+<script>
+    // Reflect对象与Proxy对象一样，也是 ES6 为了操作对象而提供的新 API。
+    // Reflect设计目的：
+    // 1.将Object对象的一些明显属于语言内部的方法（比如Object.defineProperty），放到Reflect对象上
+    // 2.修改某些Object方法的返回结果，让其变得更合理
+    // 比如原本某些操作会产生错误，现在是返回一个false
+    /*
+    * @Author: ShenJie 
+    * @Date: 2018-07-06 13:43:09 
+    * @Last Modified by: ShenJie
+    * @Last Modified time: 2018-07-06 13:43:29
+    */
+    var numbtns = document.getElementsByClassName("num")    
+    var tags = document.getElementsByClassName("tag")   
+    var dis = document.getElementsByClassName("dis")[0]
+    var eq = document.getElementsByClassName("equal")[0]
+    var info = document.getElementsByClassName("info")[0]
+    var clear = document.getElementsByClassName("clear")[0]
+
+    var disNum = 0
+    var lasttype = 'num'
+    var oldnum = 0
+    var newnum = 0
+    var calType = null
+
+
+    for (let i = 0; i < numbtns.length; i++) {
+        numbtns[i].onclick = function(params) {
+            const element = numbtns[i];
+            disNum = dis.innerText
+            if(lasttype === 'num'){
+                info.innerText = `你点击了${numbtns[i].innerText}`
+                disNum+=element.innerText
+                disNum = parseInt(disNum)
+                dis.innerText = disNum
+                oldnum = disNum
+            }else if(lasttype === 'tag'){
+                dis.innerText = 0
+                newnum = 0
+                disNum = 0
+                info.innerText = `你点击了${numbtns[i].innerText}`
+                disNum += element.innerText
+                disNum = parseInt(disNum)
+                dis.innerText = disNum
+                newnum = disNum
+                lasttype = 'tag'
+            }
+            lasttype = 'num'
+            console.log(oldnum, calType, newnum);
+        }
+        
+    }
+
+    for (let i = 0; i < tags.length; i++) {
+        tags[i].onclick = function(params) {
+            const element = tags[i];
+            if(lasttype === 'num'){
+                info.innerText = `你点击了${tags[i].innerText}`
+                oldnum = dis.innerText
+            }
+            lasttype = 'tag'
+            calType = tags[i].innerText
+            console.log(oldnum, calType, newnum);
+        }
+    }
+    eq.onclick = function () {
+        info.innerText = `你点击了=号`
+        console.log(oldnum, calType, newnum);
+        switch (calType) {
+            case "+":
+                dis.innerText = parseInt(oldnum) + parseInt(newnum)
+                break;
+            case "-":
+                dis.innerText = parseInt(oldnum) - parseInt(newnum)
+                
+                break;
+            case "*":
+                dis.innerText = parseInt(oldnum) * parseInt(newnum)
+                
+                break;
+            case "÷":
+                dis.innerText = (parseInt(oldnum) / parseInt(newnum)).toFixed(4)
+                
+                break;
+            default:
+                break;
+        }
+    }
+    clear.onclick = function(){
+        oldnum = 0
+        calType = null
+        newnum = 0
+        dis.innerText = 0
+        info.innerText="你点了清除"
+        lasttype = 'num'
+    }
+
+</script>
+</html>

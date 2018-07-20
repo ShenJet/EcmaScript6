@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    import a from "./23module.js";
+    console.log(a);
+    
+    // es6之前的模块体系主要有2：
+        // commonJS -> 服务端 node
+        // var express = require('express');
+        // 加载了express整个模块，在从中读取所需内容
+        // 又称 "运行时加载",因为只有运行时才能得到这个对象
+
+        // AMD -> 浏览器端 requireJS
+
+    // 1.ES6模块
+    // es6模块不是对象，而是通过export命令显式地制定输出的代码，
+    // 再通过import命令输入
+
+    // ES6模块
+    // import { stat, exists, readFile } from 'fs';
+    // 这边仅仅是加载了fs模块的stat exists readFile三个方法，
+    // 模块的其他方法是不加载的
+    // 这种加载模式又称 “编译时加载” or “静态加载”
+    // 这种比CommonJS效率更高
+
+    // 其他的好处：
+        // 1.不再需要UMD模块格式，服务端和客户端都会支持ES6模块
+        // 2.将来浏览器的新的API就能用模块格式提供，不再需要作成全局变量或navigator的属性
+        // 3.不再需要对象作为命名空间（如Math对象），未来这些功能可以通过模块提供
+
+
+    // 2.严格模式
+    // es6模块自动使用严格模式 不论有无 ‘use strict’
+    // 严格模式的限制主要有：
+        // 1.变量必须声明才能用
+        // 2.函数的参数不能有同名属性 否则报错
+        // 3.不能使用with语句
+        // 4.不能对只读属性赋值，否则报错
+        // 5.不能使用前缀0表示八进制数 否则报错
+        // 6.不能删除不可删除的属性 否则报错
+        // 7.不能删除变量delete prop  否则报错，只能删除属性delete global[prop]
+        // 8.eval不会再它的外层作用域引入变量
+        // 9.eval和arguments不能被重新赋值
+        // 10.arguments不会自动反映函数参数的变化
+        // 11.不能使用arguments.callee
+        // 12.不能使用arguments.caller
+        // 13.禁止this指向全局对象
+        // 14.不能使用fn.caller和fn.arguments获取函数调用的堆栈
+        // 15.增加了保留字 如protected static interface
+    // 以上这些  模块必须都遵守
+    // ES6 模块之中，顶层的this指向undefined，即不应该在顶层代码使用this。
+
+    // 3.export命令
+    // 第一种写法
+    // profile.js
+    // export var firstName = 'Michael';
+    // export var lastName = 'Jackson';
+    // export var year = 1958;
+
+    // 第二种写法
+    // profile.js
+    var firstName = 'Michael';
+    var lastName = 'Jackson';
+    var year = 1958;
+    // export {firstName, lastName, year}
+
+    // 可以输出函数、类
+    // export function test1(params) {
+    //     return params
+    // }
+
+    // 可用as重命名输出的变量
+    function test2(params) {
+        return params
+    }
+    function test3(params) {
+        return params+params
+    }
+    // export {
+    //     test2 as func1,
+    //     test3 as func2
+    // }
+
+    // export不能放在函数中执行，只能置于模块顶层，import也一样
+    // import a from "./23module.js";
+    // console.log(a);
+    
+
+
+
+</script>
+</html>

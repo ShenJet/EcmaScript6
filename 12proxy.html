@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Proxy</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // Proxy 可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，
+    // 都必须先通过这层拦截，因此提供了一种机制，可以对外界的访问进行过滤和改写。
+    // 因此 可以理解为‘代理器’
+    let obj = new Proxy({}, {
+        get: function(target, key, receiver) {
+            console.log(`getting ${key}`);
+            return Reflect.get(target, key, receiver)
+        },
+        set: function(target, key, value, receiver) {
+            console.log(`setting ${key}`);
+            return Reflect.set(target, key, value, receiver)
+        }
+    })
+    // 以上代码对空对象架设了一层拦截，重定义了属性的读取和设置
+    // 看一下代理后的结果：
+    obj.count = 1;//setting count
+    ++obj.count //getting count -> setting count
+
+// part1.
+    // proxy的语法：
+    // let prx = new Proxy(target_obj, handler)
+
+    let pxy = new Proxy({}, {
+        get:function(){
+            return 35
+        }
+    })
+    console.log(pxy.time);//35
+    console.log(pxy.time1);//35
+    
+    // 目标对象
+    let target = {id:"ksjd2jh2",name:"shenjie"}
+    // 拦截规则  
+    // let handler = {}
+    let handler = {
+        get: function name(target, key, receiver) {
+        if(key === 'id')
+            return 1
+        return target[key]
+    }
+    }
+    // 加载规则到目标对象
+    let pxy1 = new Proxy(target, handler)
+    console.log(pxy1.id);//1
+    console.log(pxy1.name);//shenjie
+    
+    // 技巧：可以将这个代理直接设置到target属性中去
+    let target1 = {
+        id:123,
+        name:"jack"
+    }
+    let pxy0 = {
+        proxy: new Proxy(target1, {
+            get:function(target, key, value, receiver){
+                if(key == "id") {
+                    return undefined
+                }
+                return target[key]
+            }
+        })
+    }
+      
+    console.log(pxy0.proxy.id);//undefined
+    console.log(pxy0.proxy.name);//jack
+    console.log(target1.id);//123
+    
+    // Proxy共支持13中操作：
+    // get(target, propKey, receiver)：拦截对象属性的读取，比如proxy.foo和proxy['foo']。
+    // set(target, propKey, value, receiver)：拦截对象属性的设置，比如proxy.foo = v或proxy['foo'] = v，返回一个布尔值。
+    // has(target, propKey)：拦截propKey in proxy的操作，返回一个布尔值。
+    // deleteProperty(target, propKey)：拦截delete proxy[propKey]的操作，返回一个布尔值。
+    // ownKeys(target)：拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)、for...in循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而Object.keys()的返回结果仅包括目标对象自身的可遍历属性。
+    // getOwnPropertyDescriptor(target, propKey)：拦截Object.getOwnPropertyDescriptor(proxy, propKey)，返回属性的描述对象。
+    // defineProperty(target, propKey, propDesc)：拦截Object.defineProperty(proxy, propKey, propDesc）、Object.defineProperties(proxy, propDescs)，返回一个布尔值。
+    // preventExtensions(target)：拦截Object.preventExtensions(proxy)，返回一个布尔值。
+    // getPrototypeOf(target)：拦截Object.getPrototypeOf(proxy)，返回一个对象。
+    // isExtensible(target)：拦截Object.isExtensible(proxy)，返回一个布尔值。
+    // setPrototypeOf(target, proto)：拦截Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。
+    // apply(target, object, args)：拦截 Proxy 实例作为函数调用的操作，比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)。
+    // construct(target, args)：拦截 Proxy 实例作为构造函数调用的操作，比如new proxy(...args)。
+
+//part2. 
+    // Proxy.revocable方法返回一个可取消的 Proxy 实例。
+    let tar = {};
+    let han = {};
+
+    let {proxy, revoke} = Proxy.revocable(tar, han);
+
+    proxy.foo = 123;
+    proxy.foo // 123
+
+    revoke();
+    try {
+        proxy.foo 
+    } catch (error) {
+        console.log(error);
+        // TypeError: ...has been Revoked
+    }
+    console.log(123);
+    
+//part3.  this 问题
+    // 在 Proxy 代理的情况下，目标对象内部的this关键字会指向 Proxy 代理。
+    const tar1 = {
+        m(){
+            console.log(this === pxy2);
+        }
+    };
+    const han1 = {};
+    const pxy2 = new Proxy(tar1, han1)
+    tar1.m()//false
+    pxy2.m()//true
+
+//part4. Web服务的客户端
+    // 可以拦截任意属性
+    // 也可用在数据库ORM层
+
+
+    
+
+
+
+
+
+
+</script>
+</html>

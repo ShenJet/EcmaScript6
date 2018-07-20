@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // ES6新增数据结构Set，类似于数组，
+    // 特点：元素都是唯一的，无重复
+
+
+    //part1.Set
+    // 1. set的定义
+    let s = new Set();
+    [2,3,4,6,2,2,34,6].forEach((x=>s.add(x)));
+    console.log(s);// {2,3,4,6,34}
+    console.log(s.length);// undefined
+
+    let s1 = new Set([2,3,4,1,3,2,6])
+    console.log(s1);//{2,3,4,1,6}
+    console.log([...s1]);//[2,3,4,1,6]
+    //获取Set的长度
+    console.log(s1.size);//5
+
+    //* 一个去处数组重复项的方法：
+    var removeSame = x => [...new Set(x)]
+    console.log(removeSame([2,3,4,1,3,2,6]));
+
+    //*在Set看来，NaN等于NaN
+    //*而两个对象总是不等
+    let s2 = new Set()
+    s2.add(NaN)
+    s2.add({})
+    s2.add(NaN)
+    s2.add({})
+    console.log(s2);//
+
+    console.log(s2.constructor);//Set()
+
+    // 2. Set实例的属性和方法
+    //属性 - 2
+    // Set.prototype.constructor：构造函数，默认就是Set函数。
+    // Set.prototype.size：返回Set实例的成员总数。
+
+    // 操作方法 - 4
+    // add(value)：添加某个值，返回 Set 结构本身。
+    let s3 = new Set()
+    s3.add(1)
+    s3.add(33)
+    s3.add(44)
+    console.log(s3)
+    // delete(value)：删除某个值，返回一个布尔值，表示删除是否成功。
+    let x = 33
+    s3.delete(x)
+    console.log(s3)//{1, 44}
+    // has(value)：返回一个布尔值，表示该值是否为Set的成员。
+    let res1 = s3.has(x)
+    let res2 = s3.has(44)
+    console.log(res1, res2);// false true
+    // clear()：清除所有成员，没有返回值。
+    s3.clear()
+    console.log(s3);//{}
+
+    //Set的遍历方法 - 4个
+    // keys()：返回键名的遍历器
+    let s4 = new Set([1,2,4,4,5,6,78,9])
+    console.log(s4)//1,2,4,5,6,78,9
+    for(let x of s4.keys()){
+        console.log(x)
+    }
+    // values()：返回键值的遍历器 
+    //**因为Set没有键名，所以keys()和values()效果一样
+    for(let x of s4.values()){
+        console.log(x)
+    }
+    // entries()：返回键值对的遍历器
+    //这个就有点奇怪了，输出的是一个个数组，每个数组有两个一样的项
+    for(let x of s4.entries()){
+        console.log(x)
+        // [1,1] [2,2] [4,4] ...
+    }
+    // Set数据结构默认也是可遍历的
+    for (const x of s4) {
+        console.log(x)
+        // 1 2 4 5 ...
+    }
+    // forEach()：使用回调函数遍历每个成员
+    s4.forEach((v,k)=>
+        console.log(k,v)
+        // k==v
+    )
+
+    //扩展运算符内部其实也是for of
+    //所以Set也可以用扩展运算符
+    let arr = [...s4]
+    console.log(arr);//[1,2,4,5,6,78,9]
+    //**Set可以很方便的用作数组去重
+
+    // part2. weakSet
+    //WeakSet 结构与 Set 类似，也是不重复的值的集合。
+    //但是，它与 Set 有两个区别。
+
+    //首先，WeakSet 的成员只能是对象，而不能是其他类型的值。
+    //其次，WeakSet 中的对象都是弱引用，即垃圾回收机制不考虑 WeakSet 对该对象的引用，
+    //也就是说，如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，
+    //不考虑该对象还存在于 WeakSet 之中。
+
+    //由于上面这个特点，WeakSet 的成员是不适合引用的，因为它会随时消失。
+    //另外，由于 WeakSet 内部有多少个成员，取决于垃圾回收机制有没有运行，
+    //运行前后很可能成员个数是不一样的，而垃圾回收机制何时运行是不可预测的，
+    //因此 ES6 规定 WeakSet 不可遍历。
+
+    //
+    const ws = new WeakSet();
+    const ws1 = new WeakSet([[1,2],[3,4]]);
+    console.log(ws1);
+
+    //WeakSet 没有size属性，没有办法遍历它的成员。
+
+    //3.Map
+    // 含义和基本用法
+    // JavaScript 的对象（Object），
+    // 本质上是键值对的集合（Hash 结构），但是传统上只能用字符串当作键。
+    // 这给它的使用带来了很大的限制。
+
+    // ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，
+    // 但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+    // 也就是说，Object 结构提供了“字符串—值”的对应，
+    // Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。
+
+    const m1 = new Map()
+    const o1 = {name:"shenjie"}
+    //set方法
+    m1.set(o1, "o1's value")
+    console.log(m1)
+    //get方法
+    let v1 = m1.get(o1)
+    console.log(v1);//"o1's value"
+
+    // has方法
+    let has = m1.has(o1)
+    console.log(has);//true
+
+    // delete方法
+    let del = m1.delete(o1)
+    console.log(del);//true
+
+    let has1 = m1.has(o1)
+    console.log(has1);//false
+
+    // 赋值覆盖
+    const m2 = new Map()
+    m2
+    .set(1,"aaa")
+    .set(1,"bbb")
+    console.log(m2.get(1));//bbb
+
+    m2
+    .set("a1","aaa")
+    .set("a1","bbb")
+    console.log(m2.get('a1'));//bbb
+
+    m2
+    .set(["a1"],"aaa")
+    console.log(m2.get(['a1']));//undefined
+    //* 键为对象时，要注意：
+    //  表面是针对同一个键，但实际上这是两个值，
+    //内存地址是不一样的，因此get方法无法读取该键
+    //正确写法：
+    let key1 = ['a1']
+    m2
+    .set(key1,"aaa")
+    console.log(m2.get(key1));//aaa
+    //set和get一定要同一个变量！
+
+    const m3 = new Map()
+    let k1 = ['a1']
+    let k2 = ['a1']
+    m3
+    .set(k1, "666")
+    .set(k2,'888')
+
+    console.log(m3.get(k1));//666
+    console.log(m3.get(k2));//888
+    //尽管k1 k2值相等，但是在map中依然被认为是两个不同的量
+
+    //关于Map的键：
+    //如果键是简单类型（数字字符串 布尔值），
+    //则只要是严格相等的两个值就被认为是同一个键
+    //Map认为NaN===NaN
+    //如果是对象类型则需要来自同一个变量
+
+    //size属性：Map的成员数
+    console.log(m3.size);//2
+
+    //set(k, v)
+    m3.set(undefined,'undefined')
+
+    //get(k)
+    let res3 = m3.get(undefined)
+    console.log(res3);//'undefined'
+
+    //has(k)
+    let res4 = m3.has(k1)
+    let res5 = m3.has(true)
+    console.log(res4, res5);//true false
+
+    //delete(k)
+    m3.set('del','delete')
+    console.log(m3);
+    let res6 = m3.delete('del')
+    console.log(216);
+    console.log(res6, m3);//true ...
+
+    //clear()
+    // let m4 = m3
+    // console.log(m4);
+    // m4.clear()
+    // console.log(m4);//{}
+    // console.log(m3);//{}  注意m3也被清空了
+
+    //换个写法：
+    let m5 = new Map([...m3])
+    console.log(227,m5);
+    m5.clear()
+    console.log(m5);//{}
+    console.log(m3);//{}  注意 m3没有被清空
+
+    //遍历方法
+    //keys（）
+    console.log(235, m3);
+    for (const k of m3.keys()) {
+        console.log(k);//['a1'] ['a1'] undefined
+    }
+
+    //values()
+    for (const v of m3.values()) {
+        console.log(v);//'666' '888' 'undefined'
+    }
+
+    //entries
+    for (const v of m3.entries()) {
+        console.log(v);
+        //[['a1'], '666'] [['a1'], '888'] [undefined, 'undefined']
+    }
+    //or
+    for (let [k, v] of m3.entries()) {
+        console.log(k, v);
+    }
+    //or
+    for (let [k, v] of m3 ){
+        console.log(k, v);
+    }
+
+    //forEach()
+    console.log(260);
+    m3.forEach((v,k,m) => {
+        console.log(v,k,m);
+        //v:666 888 'undefined'
+    });
+    //** forEach方法还可以接受第二个参数，用来绑定this
+    const dealer = {
+        deal:(a,b)=>{
+            console.log(a,b);
+        }
+    }
+    console.log(271);
+    m3.forEach(function(v,k,m){// 注意这个地方不能用箭头函数
+        this.deal(k,v)
+    }, dealer)
+
+
+    //map转为数组：
+    let a1 = [...m3]
+    console.log('a1',a1);
+    let a4 = [...m3.entries()]
+    console.log('a4',a4);
+
+    let a2 = [...m3.keys()]
+    console.log('a2',a2);
+
+    let a3 = [...m3.values()]
+    console.log('a3',a3);
+    //因此，扩展运算符配合数组的map方法，
+    //可以实现Map的遍历
+
+    let obj = Object.create(null);
+    console.log(obj);//{}
+
+    //WeakMap
+    //区别：
+    // 
+
+    // 1.WeakMap只接受对象作为键名（null除外），
+    // 不接受其他类型的值作为键名。
+    const map = new WeakMap();
+    map.set(1, 2)
+    // TypeError: 1 is not an object!
+    
+    // 2.WeakMap的键名所指向的对象，不计入 垃圾回收机制 
+
+
+    // 此外，语法上，
+    // 一是没有遍历操作（即没有keys()、values()和entries()方法），
+    // 也没有size属性。
+    // 二是无法清空，即不支持clear方法。
+    
+    // 因此，WeakMap只有四个方法可用：get()、set()、has()、delete()。
+
+
+
+
+</script>
+</html>

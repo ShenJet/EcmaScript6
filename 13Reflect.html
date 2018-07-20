@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reflect</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    
+</body>
+<script>
+    // Reflect对象与Proxy对象一样，也是 ES6 为了操作对象而提供的新 API。
+    // Reflect设计目的：
+    // 1.将Object对象的一些明显属于语言内部的方法（比如Object.defineProperty），放到Reflect对象上
+    
+    // 2.修改某些Object方法的返回结果，让其变得更合理
+    // 比如原本某些操作会产生错误，现在是返回一个false
+    // 原先可能需要使用try-catch语法防止报错的  现在只需if就可以了
+    
+    // 3.一些命令式的操作 可以变得函数化了
+    const obj = {name:666,age:18,sex:1}
+    console.log('name' in obj);//true
+    //=>
+    let has = Reflect.has(obj, 'name')
+    console.log(has);//true
+
+    // 4.Reflect对象的方法与Proxy对象的方法一一对应
+    
+    let tar1 = {name:666, age:18, sex:1, bro:2}
+    let pxy1 = new Proxy(tar1, {
+        set: function(target, name, value, receiver) {
+            var success = Reflect.set(target, name, value, receiver);
+            if (success) {
+                console.log('property ' + name + ' on ' + target + ' set to ' + value);
+            }
+            return success;
+        }
+    });
+    pxy1.sis = 3 ;
+    console.log(pxy1.sis);
+    
+    
+
+
+
+
+
+</script>
+</html>

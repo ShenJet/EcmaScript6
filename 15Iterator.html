@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>遍历器</title>
+</head>
+<body>
+    <!--  -->
+
+
+</body>
+<script>
+    // 1. Iterator 即遍历器
+    // es6从原有的数组和对象基础上新增Set Map2中数据结构
+    // 通过Iterator来遍历以上数据类型 可以获取统一的访问机制
+    
+    // Iterator 的作用有三个：
+        // 一是为各种数据结构，提供一个统一的、简便的访问接口；
+        // 二是使得数据结构的成员能够按某种次序排列；
+        // 三是 ES6 创造了一种新的遍历命令for...of循环，Iterator 接口主要供for...of消费。
+
+
+    // 2.默认 Iterator 接口
+    // Iterator 接口的目的，就是为所有数据结构，
+    // 提供了一种统一的访问机制，即for...of循环（详见下文）。
+    // 当使用for...of循环遍历某种数据结构时，该循环会自动去寻找 Iterator 接口。
+
+    // ES6 的有些数据结构原生具备 Iterator 接口（比如数组），
+    // 即不用任何处理，就可以被for...of循环遍历。
+    // 原因在于，这些数据结构原生部署了Symbol.iterator属性（详见下文），
+    // 另外一些数据结构没有（比如对象）。凡是部署了Symbol.iterator属性的数据结构，
+    // 就称为部署了遍历器接口。调用这个接口，就会返回一个遍历器对象。
+
+    // 原生具备 Iterator 接口的数据结构如下。
+        // Array
+        // Map
+        // Set
+        // String
+        // TypedArray
+        // 函数的 arguments 对象
+        // NodeList 对象
+
+    let arr = ['html','css','js','node']
+
+    let itr = arr[Symbol.iterator]()
+    console.log(itr);
+    
+    console.log(itr.next());// {value:'html',done:false}
+    console.log(itr.next());// {value:'css',done:false}
+    console.log(itr.next());// {value:'js',done:false}
+    console.log(itr.next());// {value:'node',done:false}
+    console.log(itr.next());// {value:undefined,done:true}
+    console.log(itr.next());// {value:undefined,done:true}
+
+    // 对象（Object）之所以没有默认部署 Iterator 接口，
+    // 是因为对象的哪个属性先遍历，哪个属性后遍历是不确定的，需要开发者手动指定。
+    
+
+    // 7.for...of
+    // ES6 借鉴 C++、Java、C# 和 Python 语言，
+    // 引入了for...of循环，作为遍历所有数据结构的统一的方法。
+    // 一个数据结构只要部署了Symbol.iterator属性，就被视为具有 iterator 接口，
+    // 就可以用for...of循环遍历它的成员。也就是说，for...of循环内部调用的是数据结构的Symbol.iterator方法。
+    // for...of循环可以使用的范围包括数组、Set 和 Map 结构、
+    // 某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、
+    // 后文的 Generator 对象，以及字符串
+
+    // *JavaScript 原有的for...in循环，只能获得对象的键名，
+    // 不能直接获取键值。ES6 提供for...of循环，允许遍历获得键值。
+
+    // *for of遍历数组时，只会返回索引为数字的对应的项
+
+
+    // 并不是所有类似数组的对象都具有 Iterator 接口，一个简便的解决方法，就是使用Array.from方法将其转为数组。
+
+    let arrayLike = { length: 2, 0: 'a', 1: 'b' , name:"shenjie"};
+
+    // 报错
+    // for (let x of arrayLike) {
+        // console.log(x);
+    // }
+
+    // 正确
+    for (let x of Array.from(arrayLike)) {
+        console.log(x);//a b
+    }
+
+
+    // 最原始的遍历就是for循环
+
+    // 此外还可以使用xxxArr.forEach(function(v){
+        // ...
+    // })
+    // 这种的缺点是不能中途跳出循环
+
+    // 而另一个遍历方法 for……in 则是主要用来遍历对象数据类型
+    // 因为它输出的是键名  不是value
+    // for (const key in object) {
+    //     if (object.hasOwnProperty(key)) {
+    //         const element = object[key]; 
+    //     }
+    // }
+    
+    // 相比之下，for of拥有如下优点：
+        // 有着同for...in一样的简洁语法，但是没有for...in那些缺点。
+        // 不同于forEach方法，它可以与break、continue和return配合使用。
+        // 提供了遍历所有数据结构的统一操作接口。
+
+    
+
+
+
+
+
+
+</script>
+</html>

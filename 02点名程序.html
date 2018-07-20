@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reflect</title>
+</head>
+<body>
+
+    <button onclick="randomOne()">随机一下</button>
+</body>
+<script>
+    /*
+    * @Author: ShenJie 
+    * @Date: 2018-07-06 13:46:24 
+ * @Last Modified by: ShenJie
+ * @Last Modified time: 2018-07-20 16:46:24
+    */
+
+    var stus = ['崔世杰','徐佳磊','笪文静','何怡','李鑫','章子让',
+                '王钊','华建庞','徐振红','蔡天宇','陈静涛','王二威','杨青山',
+                '张本旺','王钧则','谢严','高浩'];
+
+    let ol = document.createElement("ol")
+    stus.map(function(v,i) {
+        let li = document.createElement("li")
+        li.innerText = v
+        ol.appendChild(li)
+    })
+    document.body.appendChild(ol)
+
+    function randomOne() {
+        let lis = document.getElementsByTagName("li")
+        console.log(lis);
+        for(var i=0;i<lis.length;i++){
+            lis[i].style.backgroundColor = 'transparent'
+        }
+        lis[Math.floor(Math.random()*stus.length)].style.backgroundColor = "yellowgreen"
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>
